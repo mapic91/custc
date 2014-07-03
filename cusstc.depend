@@ -2020,7 +2020,7 @@
 1404289777 e:\temp\programingtemp\cusstc\editor.h
 	"wx/stc/stc.h"
 
-1404303535 source:e:\temp\programingtemp\cusstc\mainframe.cpp
+1404366906 source:e:\temp\programingtemp\cusstc\mainframe.cpp
 	"JxqyStc.h"
 	"MainFrame.h"
 	"wx/msgdlg.h"
@@ -4225,11 +4225,14 @@
 
 1384175916 d:\protools\wxwidgets\wxwidgets-3.0-dev\include\wx\os2\msgdlg.h
 
-1404308501 e:\temp\programingtemp\cusstc\jxqystc.h
+1404377325 e:\temp\programingtemp\cusstc\jxqystc.h
 	"wx/stc/stc.h"
+	<map>
 
-1404306198 source:e:\temp\programingtemp\cusstc\jxqystc.cpp
+1404372162 source:e:\temp\programingtemp\cusstc\jxqystc.cpp
 	"JxqyStc.h"
+	"wx/textfile.h"
+	"wx/msgdlg.h"
 
 1384175916 d:\protools\wxwidgets\wxwidgets-3.0-dev\include\wx\fontenum.h
 	"wx/defs.h"
@@ -4237,4 +4240,16 @@
 	"wx/arrstr.h"
 
 1384175916 d:\protools\wxwidgets\wxwidgets-3.0-dev\lib\gcc_lib\mswu\wx\setup.h
+
+1384175917 d:\protools\wxwidgets\wxwidgets-3.0-dev\include\wx\textfile.h
+	"wx/defs.h"
+	"wx/textbuf.h"
+	"wx/file.h"
+
+1384175917 d:\protools\wxwidgets\wxwidgets-3.0-dev\include\wx\textbuf.h
+	"wx/defs.h"
+	"wx/arrstr.h"
+	"wx/convauto.h"
+	"wx/string.h"
+	"wx/dynarray.h"
 

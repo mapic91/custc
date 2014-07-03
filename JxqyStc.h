@@ -2,6 +2,14 @@
 #define JxqyStc_H
 
 #include "wx/stc/stc.h"
+
+#include <map>
+
+static int CmpStringNoCase(const wxString& first, const wxString& second)
+{
+	return first.CmpNoCase(second);
+}
+typedef std::map<wxString, wxString>::iterator FunctionMapIterator;
 class JxqyStc: public wxStyledTextCtrl
 {
 public:
@@ -34,59 +42,70 @@ public:
             StyleSetBackground(i, colour);
         }
     }
-    void SetFunctionKeyword(const wxString &words)
+    void SetFunctionKeyword(const wxString &words, bool sortedAndClean = false)
     {
-        SetKeyWords(1, words);
-        m_functionKeyword = words;
+    	if(!sortedAndClean)
+		{
+			wxArrayString arrStr = wxSplit(words, wxChar(' '), wxChar(NULL));
+			SetFunctionKeyword(&arrStr);
+		}
+		else
+		{
+			SetKeyWords(1, words);
+			m_functionKeyword = words;
+		}
+
     }
     //Set keywors, the space in words is striped
-    void SetFunctionKeyword(wxArrayString &words)
+    void SetFunctionKeyword(wxArrayString *words, bool sortedAndClean = false)
     {
-        words.Sort();
+    	if(!sortedAndClean)
+		{
+			StripBraceContensAndNonalpha(words);
+			words->Sort(CmpStringNoCase);
+		}
         m_functionKeyword.Clear();
-        size_t counts = words.Count();
-        wxString word;
+        size_t counts = words->Count();
         for(size_t i = 0; i < counts; i++)
         {
-            word = words[i];
-            word.Replace(wxT(" "), wxT(""));
-            m_functionKeyword += word;
-            if(i != counts - 1)
-				m_functionKeyword += wxT(" ");
+            m_functionKeyword += words->Item(i);
+			m_functionKeyword += wxT(" ");
         }
         SetKeyWords(1, m_functionKeyword);
     }
-    void SetFunctionKeywordFromFile(const wxString &filename);
-protected:
-private:
-	//Contents in ( ) is removed
-    wxString StripFunctionKeyword(const wxString &word)
+    void ClearFunctionKeyword()
     {
-        wxString stripedWord;
-        bool begBrace = false;
-        bool endBrace = true;
-        size_t len = word.Length();
-        for(size_t j = 0; j < len; j++)
-        {
-        	if(begBrace && word[j] == wxChar(')'))
-            {
-                endBrace = true;
-                begBrace = false;
-            }
-            if(endBrace)
-                stripedWord += word[j];
-			if(endBrace && word[j] == wxChar('('))
-            {
-                begBrace = true;
-                endBrace = false;
-            }
-        }
-        return stripedWord;
+		m_functionDescribeMap.clear();
+		m_functionKeyword.clear();
+		SetKeyWords(1, m_functionKeyword);
     }
+    void SetFunctionKeywordFromFile(const wxString &filename);
 
+    //Settings
+    void SetShowCallTip(bool show = true){m_showCallTip = show;}
+    void ShowLineNumber(bool show = true);
+
+protected:
+	void OnMouseMove(wxMouseEvent &event);
+	void OnAutocompSelection(wxStyledTextEvent &event);
+
+private:
+	/*
+	*  Helper function
+	*/
+	//( ) and contents in ( ) and nonalpha is removed
+    wxString StripBraceContensAndNonalpha(const wxString &word);
+    void StripBraceContensAndNonalpha(wxArrayString *words);
+	wxString GetWordAtPos(int pos);
+	void ShowFunctionCallTip(int pos, const wxString &word);
 
     void OnCharAdded(wxStyledTextEvent &event);
     wxString m_functionKeyword;
+    wxString m_lastCallTipWord;
+    std::map<wxString, wxString> m_functionDescribeMap;
+
+    //Settings
+    bool m_showCallTip;
 };
 
 #endif // JxqyStc_H

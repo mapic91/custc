@@ -25,7 +25,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	m_scintilla1->SetIndent( 4 );
 	m_scintilla1->SetTabIndents( false );
 	m_scintilla1->SetBackSpaceUnIndents( false );
-     wxMessageBox(m_scintilla1->StyleGetFaceName(0));
+	m_scintilla1->SetFunctionKeywordFromFile(wxT("E:\\temp\\ProgramingTemp\\cusstc\\jxqy2.txt"));
 	bSizer1->Add( m_scintilla1, 1, wxEXPAND | wxALL, 5 );
 
 
